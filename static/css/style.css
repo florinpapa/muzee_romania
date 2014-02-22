@@ -1,0 +1,18 @@
+body {
+  color: #333;
+  font-size: 16px;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.list-item {
+  list-style: none;
+  border-bottom: 1px solid #ddd;
+}
+
+  .list-item--title {
+    font-size: 1.5rem;
+  }

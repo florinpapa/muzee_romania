@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Lista muzeelor din Romania</h1>
+  {% for muzeu in muzee %}
+    <li class="list-item">
+    <p class="list-item--title">{{ muzeu.nume }} din {{ muzeu.judet }}</p>
+    </li>
+  {% endfor %}
+{% endblock %}

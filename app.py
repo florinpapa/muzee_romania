@@ -1,4 +1,6 @@
 from flask import Flask
+from flask import render_template
+import pickle
 import csv
 
 
@@ -34,6 +36,17 @@ def getCSV():
             total += content
     return "|".join(dictionar[header[3]])
 
+@app.route('/muzee')
+def toateMuzeele():
+    # @codul entitatii muzeale pos = 0
+    # @judetul pos = 2
+    # @numirea (romana) pos = 3
+    header = pickle.load(open('headers.hd', 'rb'))
+    data = pickle.load(open('data.pkl', 'rb'))
+    muzee = []
+    for i in range(len(data[header[0]])):
+        muzee.append({'cod': data[header[0]][i], 'judet': data[header[2]][i].decode(encoding="UTF-8"), 'nume': data[header[3]][i].decode(encoding="UTF-8")})
+    return render_template('lista_muzee.html', muzee=muzee)
 
 if __name__ == "__main__":
     app.run(debug=True)
