@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, redirect
 from flask import render_template
 from re import sub, search
+from os import listdir
+from os.path import isfile, join
 import pickle
 import csv
 
@@ -57,6 +59,11 @@ def upload_file(cod):
     '''
 
 
+def getImages(code):
+    """ get all images from /static/images associated with a code """
+    onlyfiles = [ f for f in listdir(UPLOAD_FOLDER) if not search(code,f) is None ]
+    return onlyfiles
+
 #afisare informatii in functie de codul entitatii
 @app.route("/muzee/<code>")
 def get_museum_by_code(code):
@@ -87,7 +94,9 @@ def get_museum_by_code(code):
                  'lat': sub(',', '.', dictionar[header[35]][index]),
                  'lng': sub(',', '.', dictionar[header[36]][index]),
                  'coord': dictionar[header[38]][index],
-                 'photo_query': '+'.join(photo_query.split(' '))}
+                 'photo_query': '+'.join(photo_query.split(' ')),
+                 'code': code,
+                 'pictures': getImages(code)}
         return render_template('muzeu.html', muzeu=new_d)
     except:
         return "Nu s-au gasit potriviri"

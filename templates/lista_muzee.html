@@ -1,11 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Lista muzeelor din Romania</h1>
-  <p>
-  <form action="" class="pull-right">
-    <input type="text" class="input-search--large" id="search" placeholder="Cautare.." required>
-  </form>
-  </p>
   {% for muzeu in muzee %}
     <li class="list-item">
       <p class="list-item--title">
@@ -13,6 +7,17 @@
       </p>
     </li>
   {% endfor %}
+{% endblock %}
+
+{% block breadcrumb_muzeu %}
+
+  <li class="list-item pull-right">
+    <a href="/adauga">Adauga muzeu</a>
+  </li>
+  <form action="" class="pull-right" class="form--menu">
+    <input type="text" class="input-search" id="search" placeholder="Cautare.." required>
+  </form>
+
 {% endblock %}
 
 {% block extra_scripts %}

@@ -1,13 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
   <h2>{{ muzeu.de_ro }}</h2>
-  <p>
+  <p class="info-box">
     {{ muzeu.desc_ro }}
   </p>
   <div id="map" class="map"></div>
   <div id="photos" class="photo-gallery">
     <h3>Images from Flickr</h3>
   </div>
+  <div class="photo-gallery">
+    {% for picture in muzeu.pictures %}
+      <img class="gallery-item" src="{{ url_for('static', filename='images/' + picture) }}">
+    {% endfor %}
+  </div>
+  <h2>Ataseaza imagini cu {{ muzeu.de_ro }}</h2>
+  <form action="/upload/{{ muzeu.code }}" method=post enctype=multipart/form-data>
+    <p>
+       <input type=file name=file>
+       <input type=submit value=Upload>
+    </p>
+  </form>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -24,6 +36,9 @@
     var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+apiKey+"&tags={{ muzeu.photo_query }}&safe_search=1&per_page=20";
     var src;
     $.getJSON(url + "&format=json&jsoncallback=?", function(data){
+        if (data.stat != 'ok' || !data.photos.photo.length) {
+          $('#photos').remove();
+        }
         $.each(data.photos.photo, function(i,item){
             src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
             $("<img/>").addClass('gallery-item').attr("src", src).appendTo("#photos");
