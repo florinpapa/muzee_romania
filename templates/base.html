@@ -3,6 +3,8 @@
 <head>
     {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    {% block extra_css %}
+    {% endblock %}
     <title>{% block title %}{% endblock %} - My Webpage</title>
     {% endblock %}
 </head>
@@ -15,4 +17,8 @@
         {% block footer %}
         {% endblock %}
     </div>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    {% block extra_scripts %}
+    {% endblock %}
 </body>
+</html>

@@ -1,10 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ muzeu.de_ro }}</h2>
-<p>
-{{ muzeu.desc_ro }}
-</p>
-<p>
-{{ muzeu.desc_en }}
-</p>
+  <h2>{{ muzeu.de_ro }}</h2>
+  <p>
+    {{ muzeu.desc_ro }}
+  </p>
+  <h1> {{ muzeu.photo_query }} </p>
+  <div id="map" class="map"></div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([{{ muzeu.lat }}, {{ muzeu.lng }}], 17);
+    L.tileLayer('http://{s}.tile.cloudmade.com/cd94ce8c7a674395858d1212ac139111/997/256/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+      maxZoom: 18
+    }).addTo(map);
+    var marker = L.marker([{{ muzeu.lat }}, {{ muzeu.lng }}]).addTo(map);
+
+    apiKey = 'bef49378fa4c7a1253c6900787772a42';
+    var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+apiKey+"&tags={{ muzeu.photo_query }}&safe_search=1&per_page=20";
+    var src;
+    $.getJSON(url + "&format=json&jsoncallback=?", function(data){
+        console.log(data)
+        $.each(data.photos.photo, function(i,item){
+            src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
+            $("<img/>").attr("src", src).appendTo("body");
+            if ( i == 3 ) return false;
+        });
+    });
+  </script>
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 {% endblock %}

@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from re import sub, search
 import pickle
 import csv
 
@@ -21,8 +22,11 @@ def get_museum_by_code(code):
     #cautare cod
     try:
         index = dictionar[header[0]].index(code)
+        nume = dictionar[header[3]][index].decode(encoding="UTF-8")
+        photo_query = search(r'".*"', nume)
+        photo_query = photo_query.group(0)[1:len(photo_query.group(0))-1]
         new_d = {'judet': dictionar[header[2]][index].decode(encoding="UTF-8"),
-                 'de_ro': dictionar[header[3]][index].decode(encoding="UTF-8"),
+                 'de_ro': nume,
                  'de_en': dictionar[header[4]][index].decode(encoding="UTF-8"),
                  'loc': dictionar[header[5]][index].decode(encoding="UTF-8"),
                  'adr': dictionar[header[7]][index].decode(encoding="UTF-8"),
@@ -30,7 +34,11 @@ def get_museum_by_code(code):
                  'p_ro': dictionar[header[12]][index].decode(encoding="UTF-8"),
                  'p_en': dictionar[header[13]][index].decode(encoding="UTF-8"),
                  'desc_ro': dictionar[header[17]][index].decode(encoding="UTF-8"),
-                 'desc_en': dictionar[header[18]][index].decode(encoding="UTF-8")}
+                 'desc_en': dictionar[header[18]][index].decode(encoding="UTF-8"),
+                 'lat': sub(',', '.', dictionar[header[35]][index]),
+                 'lng': sub(',', '.', dictionar[header[36]][index]),
+                 'coord': dictionar[header[38]][index],
+                 'photo_query': '+'.join(photo_query.split(' '))}
         return render_template('muzeu.html', muzeu=new_d)
     except:
         return "Nu s-au gasit potriviri"
