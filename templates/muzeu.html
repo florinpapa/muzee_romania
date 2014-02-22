@@ -4,8 +4,10 @@
   <p>
     {{ muzeu.desc_ro }}
   </p>
-  <h1> {{ muzeu.photo_query }} </p>
   <div id="map" class="map"></div>
+  <div id="photos" class="photo-gallery">
+    <h3>Images from Flickr</h3>
+  </div>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -22,14 +24,18 @@
     var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+apiKey+"&tags={{ muzeu.photo_query }}&safe_search=1&per_page=20";
     var src;
     $.getJSON(url + "&format=json&jsoncallback=?", function(data){
-        console.log(data)
         $.each(data.photos.photo, function(i,item){
             src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
-            $("<img/>").attr("src", src).appendTo("body");
+            $("<img/>").addClass('gallery-item').attr("src", src).appendTo("#photos");
             if ( i == 3 ) return false;
         });
     });
   </script>
+{% endblock %}
+
+{% block breadcrumb_muzeu %}
+  <li><a href="#"> {{ muzeu.judet }} </a></li>
+  <li> {{ muzeu.de_ro }} </li>
 {% endblock %}
 
 {% block extra_css %}

@@ -92,12 +92,6 @@ def get_museum_by_code(code):
     except:
         return "Nu s-au gasit potriviri"
 
-
-@app.route("/")
-def hello():
-    return "Hello World!"
-
-
 @app.route('/csv')
 def getCSV():
     content = ""
@@ -129,7 +123,7 @@ def getCSV():
     return "|".join(dictionar[header[3]])
 
 
-@app.route('/muzee')
+@app.route('/')
 def toateMuzeele():
     # @codul entitatii muzeale pos = 0
     # @judetul pos = 2

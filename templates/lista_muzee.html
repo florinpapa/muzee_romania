@@ -3,7 +3,7 @@
   <h1>Lista muzeelor din Romania</h1>
   <p>
   <form action="" class="pull-right">
-    <input type="text" class="input-search--large" placeholder="Cautare.." required>
+    <input type="text" class="input-search--large" id="search" placeholder="Cautare.." required>
   </form>
   </p>
   {% for muzeu in muzee %}
@@ -13,4 +13,32 @@
       </p>
     </li>
   {% endfor %}
+{% endblock %}
+
+{% block extra_scripts %}
+
+  <script>
+  var search = document.querySelector('#search');
+  search.addEventListener('keyup', filterMuseums, false);
+
+  function filterMuseums(e) {
+    var input = this;
+    if (window._timeout) {
+      clearInterval(window._timeout);
+    }
+    window._timeout = setTimeout(function() {
+      filter(input.value);
+    }, 500);
+  }
+
+  function filter(value) {
+    elems = document.querySelectorAll('.list-item a');
+    [].forEach.call(elems, function(el) {
+      if (!el.innerText.match(value)) {
+        el.parentNode.parentNode.classList.add('hidden');
+      }
+    });
+  }
+  </script>
+
 {% endblock %}

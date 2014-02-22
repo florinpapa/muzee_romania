@@ -19,6 +19,17 @@ body {
   height: 480px;
 }
 
+.photo-gallery {
+  text-align: center;
+}
+
+  .gallery-item {
+    width: 200px;
+    height: 200px;
+    border: 3px solid #fff;
+    margin: 3px;
+  }
+
 .list-item {
   list-style: none;
   border-bottom: 1px solid #ddd;
@@ -42,6 +53,25 @@ body {
     font-weight: bold;
   }
 
+  .top-menu li {
+    list-style: none;
+    display: inline;
+  }
+
+  .top-menu li a {
+    color: #333;
+    border-bottom: 1px solid #333;
+    text-decoration: none;
+  }
+
+    .top-menu li:after {
+      content: ">";
+    }
+
+    .top-menu li:last-child:after {
+      content: "";
+    }
+
 .input-search--large,
 .input-search {
   border: 1px solid #333;
@@ -52,4 +82,8 @@ body {
 
 .pull-right {
   float: right;
+}
+
+.hidden {
+  display: none;
 }
