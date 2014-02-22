@@ -10,7 +10,7 @@ body {
 }
 
 .container {
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
 }
 
@@ -54,6 +54,7 @@ body {
   }
 
   .top-menu li {
+    font-size: 1.5rem;
     list-style: none;
     display: inline;
   }
@@ -75,9 +76,13 @@ body {
 .input-search--large,
 .input-search {
   border: 1px solid #333;
-  padding: 1rem;
-  font-size: 1.5rem;
   border-radius: 3px;
+  padding: .5rem;
+  margin-top: -.2rem;
+}
+
+.info-box {
+  line-height: 1.5rem;
 }
 
 .pull-right {
