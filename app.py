@@ -1,11 +1,60 @@
-from flask import Flask
+import os
+from flask import Flask, request, redirect
 from flask import render_template
 from re import sub, search
 import pickle
 import csv
 
 
+#aici probabil trebuie modificat
+UPLOAD_FOLDER = './static/images'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+
 app = Flask(__name__, static_url_path='/static')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+#metoda care intoarce indexul fisierului curent
+def get_current_index(all_files, filename):
+    max_index = 0
+    for f_name in all_files:
+        print f_name
+        if len(f_name) > len(filename):
+            if f_name[0:len(filename)] == filename:
+                index = int(f_name[len(filename):len(f_name)])
+                if index > max_index:
+                    max_index = index
+    return str(max_index + 1)
+
+
+#metoda de upload imagini
+@app.route('/upload/<cod>', methods=['POST', 'GET'])
+def upload_file(cod):
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = cod + "_"
+            all_files = os.listdir('./static/images')
+            index = get_current_index(all_files, filename)
+            print index + "###"
+            filename = filename + str(index)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect("/muzee/" + cod)
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
 
 
 #afisare informatii in functie de codul entitatii
