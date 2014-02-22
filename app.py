@@ -8,7 +8,6 @@ import pickle
 import csv
 
 
-#aici probabil trebuie modificat
 UPLOAD_FOLDER = './static/images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -20,6 +19,27 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+@app.route('/muzee/judet/<jud>')
+def get_countys(jud):
+    """intoarce toate muzeele dintr-un anumit judet"""
+    #load dictionary
+    dict_file = open('data.pkl', 'rb')
+    dictionar = pickle.load(dict_file)
+    dict_file.close()
+    #load headers
+    head_file = open('headers.hd', 'rb')
+    header = pickle.load(head_file)
+    head_file.close()
+    #find county
+    muzee = []
+    for i in range(len(dictionar[header[2]])):
+        if dictionar[header[2]][i].decode(encoding='UTF-8') == jud:
+            muzee.append({'cod': dictionar[header[0]][i],
+                          'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
+                          'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
+    return render_template('lista_muzee.html', muzee=muzee)
 
 
 #metoda care intoarce indexul fisierului curent
@@ -61,11 +81,12 @@ def upload_file(cod):
 
 def getImages(code):
     """ get all images from /static/images associated with a code """
-    onlyfiles = [ f for f in listdir(UPLOAD_FOLDER) if not search(code,f) is None ]
+    onlyfiles = [f for f in listdir(UPLOAD_FOLDER) if not search(code, f) is None]
     return onlyfiles
 
+
 #afisare informatii in functie de codul entitatii
-@app.route("/muzee/<code>")
+@app.route("/muzee/<int:code>")
 def get_museum_by_code(code):
     #load dictionary
     dict_file = open('data.pkl', 'rb')
@@ -77,10 +98,14 @@ def get_museum_by_code(code):
     head_file.close()
     #cautare cod
     try:
-        index = dictionar[header[0]].index(code)
+        index = dictionar[header[0]].index(str(code))
         nume = dictionar[header[3]][index].decode(encoding="UTF-8")
         photo_query = search(r'".*"', nume)
-        photo_query = photo_query.group(0)[1:len(photo_query.group(0))-1]
+        print photo_query
+        if photo_query is None:
+            photo_query = ""
+        else:
+            photo_query = photo_query.group(0)[1:len(photo_query.group(0)) - 1]
         new_d = {'judet': dictionar[header[2]][index].decode(encoding="UTF-8"),
                  'de_ro': nume,
                  'de_en': dictionar[header[4]][index].decode(encoding="UTF-8"),
@@ -101,39 +126,40 @@ def get_museum_by_code(code):
     except:
         return "Nu s-au gasit potriviri"
 
+
 @app.route('/adauga')
 def muzeu_nou():
     return render_template('adauga_muzeu.html')
 
-@app.route('/csv')
-def getCSV():
-    content = ""
-    dictionar = {}
-    header = []
-    with open('static/date_muzee.csv', 'r') as csvfile:
-        count = 0
-        total = ""
-        reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-        for row in reader:
-            content = ' '.join(row)
-            content_list = content.split('|')
-            if count == 0:
-                count += 1
-                header += content_list
-                print header
-                for head in content_list:
-                    dictionar[head] = []
-            else:
-                for i in range(len(content_list)):
-                    dictionar[header[i]].append(content_list[i])
-            total += content
-    output = open('data.pkl', 'wb')
-    pickle.dump(dictionar, output)
-    output.close()
-    headers = open('headers.hd', 'wb')
-    pickle.dump(header, headers)
-    headers.close()
-    return "|".join(dictionar[header[3]])
+# @app.route('/csv')
+# def getCSV():
+#     content = ""
+#     dictionar = {}
+#     header = []
+#     with open('static/date_muzee.csv', 'r') as csvfile:
+#         count = 0
+#         total = ""
+#         reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+#         for row in reader:
+#             content = ' '.join(row)
+#             content_list = content.split('|')
+#             if count == 0:
+#                 count += 1
+#                 header += content_list
+#                 print header
+#                 for head in content_list:
+#                     dictionar[head] = []
+#             else:
+#                 for i in range(len(content_list)):
+#                     dictionar[header[i]].append(content_list[i])
+#             total += content
+#     output = open('data.pkl', 'wb')
+#     pickle.dump(dictionar, output)
+#     output.close()
+#     headers = open('headers.hd', 'wb')
+#     pickle.dump(header, headers)
+#     headers.close()
+#     return "|".join(dictionar[header[3]])
 
 
 @app.route('/')
