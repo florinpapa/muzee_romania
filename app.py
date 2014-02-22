@@ -28,8 +28,10 @@ def get_museum_by_code(code):
                  'adr': dictionar[header[7]][index].decode(encoding="UTF-8"),
                  'tel': dictionar[header[9]][index].decode(encoding="UTF-8"),
                  'p_ro': dictionar[header[12]][index].decode(encoding="UTF-8"),
-                 'p_en': dictionar[header[13]][index].decode(encoding="UTF-8")}
-        return render_template('muzeu.html', info=new_d)
+                 'p_en': dictionar[header[13]][index].decode(encoding="UTF-8"),
+                 'desc_ro': dictionar[header[17]][index].decode(encoding="UTF-8"),
+                 'desc_en': dictionar[header[18]][index].decode(encoding="UTF-8")}
+        return render_template('muzeu.html', muzeu=new_d)
     except:
         return "Nu s-au gasit potriviri"
 
