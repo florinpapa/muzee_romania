@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Lista muzeelor din Romania</h1>
+  <p>
+  <form action="" class="pull-right">
+    <input type="text" class="input-search--large" placeholder="Cautare.." required>
+  </form>
+  </p>
   {% for muzeu in muzee %}
     <li class="list-item">
-    <p class="list-item--title">{{ muzeu.nume }} din {{ muzeu.judet }}</p>
+      <p class="list-item--title">
+        <a href="muzee/{{ muzeu.cod }}">{{ muzeu.nume }} din {{ muzeu.judet }}</a>
+      </p>
     </li>
   {% endfor %}
 {% endblock %}
