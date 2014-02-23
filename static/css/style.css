@@ -73,6 +73,16 @@ body {
       content: "";
     }
 
+.form-input,
+.form-input input {
+  font-size: 1.5rem;
+}
+
+.form-input input {
+  
+}
+
+
 .input-search--large,
 .input-search {
   border: 1px solid #333;
