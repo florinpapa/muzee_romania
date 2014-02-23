@@ -18,7 +18,7 @@
           Judet
         </td>
         <td>
-          <input class="input-search" type="text" name="judet" placeholder="Judet in care se afla">
+          <input class="input-search" type="text" id="judet" name="judet" placeholder="Judet in care se afla">
         </td>
       </tr>
       <tr>
@@ -50,6 +50,7 @@
 {% block extra_scripts %}
   <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
   <script>
+
     var marker,
         inputLat = $('input[name=lat]'),
         inputLng = $('input[name=lng]')
@@ -60,6 +61,21 @@
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
       maxZoom: 18
     }).addTo(map);
+
+    $('#judet').on('focusout', function() {
+      var nume = $('input[name=nume]').val().split(' ').join('+');
+      var judet = $(this).val().split(' ').join('+');
+      $.get('http://nominatim.openstreetmap.org/search?q='+ judet + '+' + nume +'&format=json')
+        .success(function(data){
+            if(data.length) {
+              data = data[0];
+              map.setView(new L.LatLng(data.lat, data.lon), 13);
+            }
+          })
+        .fail(function(data) {
+            console.log(data);
+          })
+    });
 
     map.on('click', function(e) {
       var m = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
