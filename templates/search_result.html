@@ -1,7 +1,7 @@
 {% for muzeu in muzee %}
     <li class="list-item">
       <p class="list-item--title">
-        <a href="/muzee/{{ muzeu.cod }}">{{ muzeu.nume }} din {{ muzeu.judet }}</a>
+        <a data-lat={{ muzeu.lat }} data-lng={{ muzeu.lng }} href="/muzee/{{ muzeu.cod }}">{{ muzeu.nume }} din {{ muzeu.judet }}</a>
       </p>
     </li>
 {% endfor %}

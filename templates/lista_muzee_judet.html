@@ -23,17 +23,92 @@
 
 {% endblock %}
 
+{% block extra_css %}
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+{% endblock %}
+
 {% block extra_scripts %}
 
   <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
   <script>
-    var map = L.map('map').setView([{{ muzee[0].lat }}, {{ muzee[0].lng }}], 10);
+
+  var search = document.querySelector('#search');
+  var markers = [];
+  var coords = [];
+  var marker;
+  search.addEventListener('keyup', filterMuseums, false);
+
+  function filterMuseums(e) {
+    var input = this;
+    if (window._timeout) {
+      clearInterval(window._timeout);
+    }
+    window._timeout = setTimeout(function() {
+      filter(input.value);
+    }, 500);
+  }
+
+    function filter(value) {
+    var url = '/search';
+    if (value) url += '/' + value;
+    $.get(url)
+      .success(function(data) {
+          if (data.length) {
+              $('#lista-muzee').html(data);
+              getCoords();
+            } else {
+              $('#lista-muzee').html('<li class="list-item"><p class="list-item--title">Nu s-au gasit rezultate</p></li>');
+            }
+          })
+    .fail(function(data){
+          console.log(data)
+        })
+    }
+
+    function getCoords() {
+      var items = $('#lista-muzee li a');
+      coords = [];
+      $.each(items, function(idx, el) {
+          console.log(el);
+          coords.push({
+              'lat': el.getAttribute('data-lat'),
+              'lng': el.getAttribute('data-lng')
+            });
+          console.log(coords);
+      });
+
+      clearMarkers();
+      placeMarkers(coords);
+
+    }
+
+    function clearMarkers() {
+      markers.forEach(function(m) {
+          map.removeLayer(m);
+      });
+      markers = [];
+    }
+
+    function placeMarkers(coords) {
+      coords.forEach(function(c) {
+        if (c.lat) {
+          marker = L.marker([c.lat, c.lng]).addTo(map);
+          markers.push(marker);
+        }
+      });
+    }
+
+    var map = L.map('map').setView([{{ muzee[0].lat }}, {{ muzee[0].lng }}], 12);
     L.tileLayer('http://{s}.tile.cloudmade.com/cd94ce8c7a674395858d1212ac139111/997/256/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
       maxZoom: 18
     }).addTo(map);
+
     {% for muzeu in muzee %}
-      var marker = L.marker([{{ muzeu.lat }}, {{ muzeu.lng }}]).addTo(map);
+      {% if muzeu.lat %}
+        marker = L.marker([{{ muzeu.lat }}, {{ muzeu.lng }}]).addTo(map);
+        markers.push(marker);
+      {% endif %}
     {% endfor %}
   </script>
 
