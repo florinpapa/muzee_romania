@@ -13,6 +13,10 @@ ul {
   padding: 0;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .container {
   width: 70%;
   margin: 0 auto;

@@ -3,6 +3,9 @@
     <div class="large-12 columns hero">
       <h1>Muzeele Romaniei</h1>
     </div>
+    <p class="text-right">
+      <input type="text" class="input-search" id="search" placeholder="Cautare.." required>
+    </p>
     <ul id="lista-muzee">
   {% for muzeu in muzee %}
     <li class="list-item">
@@ -19,7 +22,6 @@
   <li class="list-item pull-right">
     <a href="/adauga">Adauga muzeu</a>
   </li>
-  <input type="text" class="input-search pull-right" id="search" placeholder="Cautare.." required>
 
 {% endblock %}
 
@@ -43,8 +45,10 @@
     $.get('/search/' + value)
       .success(function(data) {
           if (data.length) {
-            $('#lista-muzee').html(data);
-          }
+              $('#lista-muzee').html(data);
+            } else {
+              $('#lista-muzee').html('<li class="list-item"><p class="list-item--title">Nu s-au gasit rezultate</p></li>')
+            }
           })
     .fail(function(data){
           console.log(data)
