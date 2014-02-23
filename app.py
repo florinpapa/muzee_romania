@@ -41,6 +41,7 @@ def search_key(index, keyword):
     else:
         for i in range(len(dictionar[header[index]])):
             new_word = dictionar[header[index]][i].decode(encoding='UTF-8').lower()
+            keyword = keyword.lower()
             if keyword in new_word:
                 muzee.append({'cod': dictionar[header[0]][i],
                               'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
