@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
+    <div class="large-6 columns">
   <h2>Poti adauga un muzeu care nu exista in lista</h2>
   <form action="/adauga/muzeu" method=GET>
     <table class="form-input">
@@ -28,14 +29,15 @@
           <textarea rows=5 cols=40 name="descriere"></textarea>
         </td>
       </tr>
-      <tr>
-        <td colspan=2><h4>Marcheaza unde se afla muzeul</h4></td>
-      </tr>
     </table>
     <input type="hidden" name="lat">
     <input type="hidden" name="lng">
-    <div id="map" class="map"></div>
   </form>
+</div>
+<div class="large-6 columns">
+  <h2>Marcheaza unde se afla muzeul</h2>
+    <div id="map" class="map"></div>
+</div>
 
 {% endblock %}
 
