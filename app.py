@@ -33,12 +33,18 @@ def search_key(index, keyword):
     head_file.close()
     #find keyword
     muzee = []
-    for i in range(len(dictionar[header[index]])):
-        new_word = dictionar[header[index]][i].decode(encoding='UTF-8')
-        if keyword in new_word:
+    if keyword == "":
+        for i in range(len(dictionar[header[0]])):
             muzee.append({'cod': dictionar[header[0]][i],
-                          'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
-                          'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
+                         'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
+                         'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
+    else:
+        for i in range(len(dictionar[header[index]])):
+            new_word = dictionar[header[index]][i].decode(encoding='UTF-8').lower()
+            if keyword in new_word:
+                muzee.append({'cod': dictionar[header[0]][i],
+                              'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
+                              'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
     return muzee
 
 
