@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
   <h2>{{ muzeu.de_ro }}</h2>
+  {% if muzeu.program %}
+    <p class="info-box">
+    <strong>Program</strong> {{ muzeu.program }}
+    </p>
+  {% endif %}
   <p class="info-box">
     {{ muzeu.desc_ro }}
   </p>
@@ -49,7 +54,7 @@
 {% endblock %}
 
 {% block breadcrumb_muzeu %}
-  <li><a href="#"> {{ muzeu.judet }} </a></li>
+<li><a href="/muzee/judet/{{ muzeu.judet }}"> {{ muzeu.judet }} </a></li>
   <li> {{ muzeu.de_ro }} </li>
 {% endblock %}
 

@@ -133,6 +133,7 @@ def get_museum_by_code(code):
                  'lng': sub(',', '.', dictionar[header[36]][index]),
                  'coord': dictionar[header[38]][index],
                  'photo_query': '+'.join(photo_query.split(' ')),
+                 'program': dictionar[header[13]][index].decode(encoding="UTF-8"),
                  'code': code,
                  'pictures': getImages(code)}
         return render_template('muzeu.html', muzeu=new_d)
