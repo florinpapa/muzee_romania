@@ -55,6 +55,13 @@ def get_countys(jud):
     return render_template('lista_muzee.html', muzee=muzee)
 
 
+@app.route('/search')
+def get_matches_void():
+    """ intoarce potrivirile gasite in numele muzeelor """
+    muzee = search_key(3, "")
+    return render_template('search_result.html', muzee=muzee)
+
+
 @app.route('/search/<keyword>')
 def get_matches(keyword):
     """ intoarce potrivirile gasite in numele muzeelor """
