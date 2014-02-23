@@ -81,7 +81,7 @@ def upload_file(cod):
 
 def getImages(code):
     """ get all images from /static/images associated with a code """
-    onlyfiles = [f for f in listdir(UPLOAD_FOLDER) if not search(code, f) is None]
+    onlyfiles = [f for f in listdir(UPLOAD_FOLDER) if str(code) in f is True]
     return onlyfiles
 
 
@@ -101,7 +101,6 @@ def get_museum_by_code(code):
         index = dictionar[header[0]].index(str(code))
         nume = dictionar[header[3]][index].decode(encoding="UTF-8")
         photo_query = search(r'".*"', nume)
-        print photo_query
         if photo_query is None:
             photo_query = ""
         else:
