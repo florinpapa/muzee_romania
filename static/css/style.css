@@ -9,6 +9,10 @@ body {
   font-size: 16px;
 }
 
+ul {
+  padding: 0;
+}
+
 .container {
   width: 70%;
   margin: 0 auto;

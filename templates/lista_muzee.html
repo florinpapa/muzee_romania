@@ -3,6 +3,7 @@
     <div class="large-12 columns hero">
       <h1>Muzeele Romaniei</h1>
     </div>
+    <ul id="lista-muzee">
   {% for muzeu in muzee %}
     <li class="list-item">
       <p class="list-item--title">
@@ -10,6 +11,7 @@
       </p>
     </li>
   {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block breadcrumb_muzeu %}
@@ -40,12 +42,15 @@
   }
 
   function filter(value) {
-    elems = document.querySelectorAll('.list-item a');
-    [].forEach.call(elems, function(el) {
-      if (!el.innerText.match(value)) {
-        el.parentNode.parentNode.classList.add('hidden');
-      }
-    });
+    $.get('/search/' + value)
+      .success(function(data) {
+          if (data.length) {
+            $('#lista-muzee').html(data);
+          }
+          })
+    .fail(function(data){
+          console.log(data)
+        })
   }
   </script>
 
