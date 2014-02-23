@@ -37,7 +37,9 @@ def search_key(index, keyword):
         for i in range(len(dictionar[header[0]])):
             muzee.append({'cod': dictionar[header[0]][i],
                          'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
-                         'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
+                         'nume': dictionar[header[3]][i].decode(encoding="UTF-8"),
+                         'lat': sub(',', '.', dictionar[header[35]][i]),
+                         'lng': sub(',', '.', dictionar[header[36]][i])})
     else:
         for i in range(len(dictionar[header[index]])):
             new_word = dictionar[header[index]][i].decode(encoding='UTF-8').lower()
@@ -45,7 +47,9 @@ def search_key(index, keyword):
             if keyword in new_word:
                 muzee.append({'cod': dictionar[header[0]][i],
                               'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
-                              'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
+                              'nume': dictionar[header[3]][i].decode(encoding="UTF-8"),
+                              'lat': sub(',', '.', dictionar[header[35]][i]),
+                              'lng': sub(',', '.', dictionar[header[36]][i])})
     return muzee
 
 
