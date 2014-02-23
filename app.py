@@ -21,9 +21,8 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@app.route('/muzee/judet/<jud>')
-def get_countys(jud):
-    """intoarce toate muzeele dintr-un anumit judet"""
+def search_key(index, keyword):
+    """ search museum dictionary """
     #load dictionary
     dict_file = open('data.pkl', 'rb')
     dictionar = pickle.load(dict_file)
@@ -32,14 +31,29 @@ def get_countys(jud):
     head_file = open('headers.hd', 'rb')
     header = pickle.load(head_file)
     head_file.close()
-    #find county
+    #find keyword
     muzee = []
-    for i in range(len(dictionar[header[2]])):
-        if dictionar[header[2]][i].decode(encoding='UTF-8') == jud:
+    for i in range(len(dictionar[header[index]])):
+        new_word = dictionar[header[index]][i].decode(encoding='UTF-8')
+        if keyword in new_word:
             muzee.append({'cod': dictionar[header[0]][i],
                           'judet': dictionar[header[2]][i].decode(encoding="UTF-8"),
                           'nume': dictionar[header[3]][i].decode(encoding="UTF-8")})
+    return muzee
+
+
+@app.route('/muzee/judet/<jud>')
+def get_countys(jud):
+    """intoarce toate muzeele dintr-un anumit judet"""
+    muzee = search_key(2, jud)
     return render_template('lista_muzee.html', muzee=muzee)
+
+
+@app.route('/search/<keyword>')
+def get_matches(keyword):
+    """ intoarce potrivirile gasite in numele muzeelor """
+    muzee = search_key(3, keyword)
+    return render_template('search_result.html', muzee=muzee)
 
 
 #metoda care intoarce indexul fisierului curent
@@ -62,7 +76,7 @@ def upload_file(cod):
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = cod + "_"
-            all_files = os.listdir('./static/images')
+            all_files = listdir('./static/images')
             index = get_current_index(all_files, filename)
             print index + "###"
             filename = filename + str(index)
