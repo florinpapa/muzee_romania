@@ -160,8 +160,16 @@ def muzeu_nou():
     return render_template('adauga_muzeu.html')
 
 
-@app.route('/adauga/muzeu', methods=['POST', 'GET'])
-def adauga_muzeu():
+def get_next_code(dictionar, header):
+    maxi = 0
+    for w in dictionar[header[0]]:
+        if len(w) > 0 and int(w) > maxi:
+            maxi = int(w)
+    return str(maxi + 1)
+
+
+@app.route('/adauga/<path:muzeu>', methods=['POST', 'GET'])
+def adauga_muzeu(muzeu):
     """adauga intrare noua in dictionar"""
     #load dictionary
     dict_file = open('data.pkl', 'rb')
@@ -171,12 +179,15 @@ def adauga_muzeu():
     head_file = open('headers.hd', 'rb')
     header = pickle.load(head_file)
     head_file.close()
+    request.args.get('nume')
     #read info from form
     if request.method == 'GET':
         target_fields = {3: 'nume', 2: 'judet', 17: 'descriere', 35: 'lat', 36: 'lng'}
         for i in range(len(header)):
             if i in target_fields.keys():
-                dictionar[header[i]].append(request.form[target_fields[i]])
+                dictionar[header[i]].append(request.args.get(target_fields[i]))
+            elif i == 0:
+                dictionar[header[i]].append(get_next_code(dictionar, header))
             else:
                 dictionar[header[i]].append("")
     output = open('data.pkl', 'wb')
