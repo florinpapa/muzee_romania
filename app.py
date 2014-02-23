@@ -131,6 +131,31 @@ def get_museum_by_code(code):
 def muzeu_nou():
     return render_template('adauga_muzeu.html')
 
+
+@app.route('/adauga/muzeu', methods=['POST', 'GET'])
+def adauga_muzeu():
+    """adauga intrare noua in dictionar"""
+    #load dictionary
+    dict_file = open('data.pkl', 'rb')
+    dictionar = pickle.load(dict_file)
+    dict_file.close()
+    #load headers
+    head_file = open('headers.hd', 'rb')
+    header = pickle.load(head_file)
+    head_file.close()
+    #read info from form
+    if request.method == 'GET':
+        target_fields = {3: 'nume', 2: 'judet', 17: 'descriere', 35: 'lat', 36: 'lng'}
+        for i in range(len(header)):
+            if i in target_fields.keys():
+                dictionar[header[i]].append(request.form[target_fields[i]])
+            else:
+                dictionar[header[i]].append("")
+    output = open('data.pkl', 'wb')
+    pickle.dump(dictionar, output)
+    output.close()
+    return redirect("/")
+
 # @app.route('/csv')
 # def getCSV():
 #     content = ""
