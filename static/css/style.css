@@ -36,6 +36,10 @@ body {
   height: 480px;
 }
 
+.button--large {
+  font-size: 2rem;
+}
+
 .photo-gallery {
   text-align: center;
 }
@@ -95,10 +99,10 @@ body {
   font-size: 1.5rem;
 }
 
-.form-input input {
-  
+.form-input td {
+  padding: 1.5rem;
+  margin: 1rem;
 }
-
 
 .input-search--large,
 .input-search {
