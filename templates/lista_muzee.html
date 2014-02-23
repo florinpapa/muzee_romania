@@ -42,7 +42,9 @@
   }
 
   function filter(value) {
-    $.get('/search/' + value)
+    var url = '/search';
+    if (value) url += '/' + value;
+    $.get(url)
       .success(function(data) {
           if (data.length) {
               $('#lista-muzee').html(data);
