@@ -109,7 +109,7 @@ def upload_file(cod):
 
 def getImages(code):
     """ get all images from /static/images associated with a code """
-    onlyfiles = [f for f in listdir(UPLOAD_FOLDER) if str(code) in f is True]
+    onlyfiles = [f for f in listdir(UPLOAD_FOLDER) if str(code) in f]
     return onlyfiles
 
 
