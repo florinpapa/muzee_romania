@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="map" id="map"></div>
+    <p class="text-right">
+      <input type="text" class="input-search" id="search" placeholder="Cautare.." required>
+    </p>
+    <ul id="lista-muzee">
+  {% for muzeu in muzee %}
+    <li class="list-item">
+      <p class="list-item--title">
+        <a href="/muzee/{{ muzeu.cod }}">{{ muzeu.nume }} din {{ muzeu.judet }}</a>
+      </p>
+    </li>
+  {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block breadcrumb_muzeu %}
+
+  <li class="list-item pull-right">
+    <a href="/adauga">Adauga muzeu</a>
+  </li>
+
+{% endblock %}
+
+{% block extra_scripts %}
+
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([{{ muzee[0].lat }}, {{ muzee[0].lng }}], 10);
+    L.tileLayer('http://{s}.tile.cloudmade.com/cd94ce8c7a674395858d1212ac139111/997/256/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+      maxZoom: 18
+    }).addTo(map);
+    {% for muzeu in muzee %}
+      var marker = L.marker([{{ muzeu.lat }}, {{ muzeu.lng }}]).addTo(map);
+    {% endfor %}
+  </script>
+
+{% endblock %}

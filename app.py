@@ -53,7 +53,7 @@ def search_key(index, keyword):
 def get_countys(jud):
     """intoarce toate muzeele dintr-un anumit judet"""
     muzee = search_key(2, jud)
-    return render_template('lista_muzee.html', muzee=muzee)
+    return render_template('lista_muzee_judet.html', muzee=muzee)
 
 
 @app.route('/search')
